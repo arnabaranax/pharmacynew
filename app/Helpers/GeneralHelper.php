@@ -448,7 +448,7 @@ if (!function_exists('resizeImage')) {
 if (!function_exists('getOverallStatus')) {
     function getOverallStatus($stud_id)
     {
-        $student =   DB::table('pharmacy_register_student as rs')
+        $student =   DB::table('final_pharmacy_register_student as rs')
             ->where('rs.s_id', $stud_id)->first();
 
         $allotment    =    DB::table('pharmacy_choice_student')

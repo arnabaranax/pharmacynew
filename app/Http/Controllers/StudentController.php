@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\StudentChoice;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
-use App\Models\RegisterStudent;
+use App\Models\Registerstudent;
 use App\Models\StudentActivity;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\PharmacyPhotoSign;
@@ -28,6 +28,8 @@ use App\Http\Resources\StudentChoiceResource;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\StudentActivityResource;
 
+
+
 class StudentController extends Controller
 {
     public function studentInfoUpdate(Request $request)
@@ -37,7 +39,7 @@ class StudentController extends Controller
         ]);
 
         try {
-            $student = RegisterStudent::where('s_appl_form_num', $request->form_no)->first();
+            $student = Registerstudent::where('s_appl_form_num', $request->form_no)->first();
             if (!$student) {
                 return response()->json([
                     'error' => true,
@@ -137,7 +139,7 @@ class StudentController extends Controller
                 studentActivite($student->s_id, "{$student->s_candidate_name} confirmed details");
             }
 
-            $student = RegisterStudent::where('s_appl_form_num', $request->form_no)->first();
+            $student = Registerstudent::where('s_appl_form_num', $request->form_no)->first();
             // $photoSign = PharmacyPhotoSign::where('student_aadhar_no', $aadharNo)->first();
             // dd($photoSign);
 
@@ -240,6 +242,44 @@ class StudentController extends Controller
                 'error' => true,
                 'message' => $e->getMessage()
             ]);
+        }
+    }
+    public function downloadReceipt($from_num)
+    {
+        try {
+            $registerstudent = DB::table('final_pharmacy_register_student')
+                ->where(['s_appl_form_num' => $from_num])
+                ->leftJoin('institute_master', 'i_code', '=', 's_inst_code')
+                ->select(
+                    'final_pharmacy_register_student.*',
+                    'institute_master.i_id',
+                    'institute_master.i_name',
+                    'institute_master.i_code',
+                    // 'pharmacy_photo_signature.student_photo',
+                    // 'pharmacy_photo_signature.student_signature'
+                )
+                ->first();
+            // dd($registerstudent);
+            $payment = PaymentTransaction::where('pmnt_stud_id', $registerstudent->s_id)
+                ->where('pmnt_pay_type', 'APPLICATION')
+                ->where('trans_status', 'SUCCESS')
+                ->first();
+            // dd($payment);
+
+            $pdf = PDF::loadView('exports.applicationform', [
+                'registerstudent' => $registerstudent,
+                'payment' => $payment,
+            ]);
+
+            return $pdf->setPaper('a4', 'portrait')
+                ->setOption(['defaultFont' => 'sans-serif',])
+                ->stream('applicationform.pdf');
+        } catch (Exception $e) {
+            generateLaravelLog($e);
+            return response()->json([
+                'error' =>  true,
+                'message' => $e->getMessage()
+            ], 400);
         }
     }
 }

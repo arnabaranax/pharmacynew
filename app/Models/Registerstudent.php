@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Registerstudent extends Model
 {
     use HasFactory;
-    protected $table        =   'pharmacy_register_student';
+    protected $table        =   'final_pharmacy_register_student';
     protected $primaryKey   =   's_id';
     public $timestamps      =   true;
 

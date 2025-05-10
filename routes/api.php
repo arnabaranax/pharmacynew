@@ -23,4 +23,6 @@ Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::post('/validate-security-code', [AuthController::class, 'validateSecurityCode']);
 Route::prefix('student')->group(function () {
     Route::post('/student-info-update', [StudentController::class, 'studentInfoUpdate']);
+    Route::get('/download-receipt/{from_num}', [StudentController::class, 'downloadReceipt']);
 });
+

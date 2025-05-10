@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\RegisterStudent;
+use App\Models\Registerstudent;
 use Exception;
 use App\Models\Otp;
 use App\Models\Token;
@@ -38,7 +38,7 @@ class AuthController extends Controller
         $login_aadhar = $request->aadhar_num;
         // $login_type = $request->login_type;
 
-        $student = RegisterStudent::where([
+        $student = Registerstudent::where([
             's_phone' => $login_phone,
             'is_active' => 1,
             // 'adm_type'=>$login_type
@@ -159,7 +159,7 @@ class AuthController extends Controller
         if ($otp) {
             DB::beginTransaction();
             try {
-                $student = RegisterStudent::where([
+                $student = Registerstudent::where([
                     's_phone' => $login_phone,
                     'is_active' => '1'
                 ])->first();
@@ -238,8 +238,8 @@ class AuthController extends Controller
                         'is_choice_fill_up' => $student->is_choice_fill_up,
                         'is_payment' => $student->is_payment,
                         'is_upgrade' => $student->is_upgrade,
-                        's_photo' =>URL::to("storage/{$student->s_photo}"),
-                        's_sign'=> URL::to("storage/{$student->s_sign}"),
+                        's_photo' => $student->s_photo ? URL::to("storage/{$student->s_photo}") : '',
+                        's_sign'  => $student->s_sign ? URL::to("storage/{$student->s_sign}") : '',
                         // 's_photo' => $pharmacyPhotoSign ? URL::to("storage/{$pharmacyPhotoSign->student_photo}") : null,
                         // 's_sign' => $pharmacyPhotoSign ? URL::to("storage/{$pharmacyPhotoSign->student_signature}") : null,
                         's_home_district' => !is_null($student->s_home_district) ? $student->s_home_district : "",
