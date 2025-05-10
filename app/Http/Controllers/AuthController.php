@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use App\Models\StudentChoice;
+use Illuminate\Support\Facades\URL;
 
 class AuthController extends Controller
 {
@@ -237,8 +238,8 @@ class AuthController extends Controller
                         'is_choice_fill_up' => $student->is_choice_fill_up,
                         'is_payment' => $student->is_payment,
                         'is_upgrade' => $student->is_upgrade,
-                        's_photo' => $s_photo,
-                        's_sign'=>$s_sign,
+                        's_photo' =>URL::to("storage/{$student->s_photo}"),
+                        's_sign'=> URL::to("storage/{$student->s_sign}"),
                         // 's_photo' => $pharmacyPhotoSign ? URL::to("storage/{$pharmacyPhotoSign->student_photo}") : null,
                         // 's_sign' => $pharmacyPhotoSign ? URL::to("storage/{$pharmacyPhotoSign->student_signature}") : null,
                         's_home_district' => !is_null($student->s_home_district) ? $student->s_home_district : "",
