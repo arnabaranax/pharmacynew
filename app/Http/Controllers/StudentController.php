@@ -282,9 +282,9 @@ class StudentController extends Controller
             ], 400);
         }
     }
-    public function checkRedirect($from_num)
+    public function checkRedirect($user_id)
     {
-        $newuser = Registerstudent::where('s_appl_form_num', $from_num)->first();
+        $newuser = Registerstudent::where('s_id', $user_id)->first();
         // dd($newuser);
 
         if ($newuser) {
