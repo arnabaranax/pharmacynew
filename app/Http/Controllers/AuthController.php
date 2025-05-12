@@ -246,7 +246,7 @@ class AuthController extends Controller
                         's_schooling_district' => !is_null($student->s_schooling_district) ? $student->s_schooling_district : "",
                         's_state_id' => $student->s_state_id,
                         'is_active' => $student->is_active,
-                        'is_lock_manual' => $student->is_lock_manual,
+                        // 'is_lock_manual' => $student->is_lock_manual,
                         'is_lock_auto' => $student->is_lock_auto,
                         'created_at' => $student->created_at,
                         'updated_at' => $student->updated_at,
@@ -278,7 +278,7 @@ class AuthController extends Controller
                     $profile_updated = $choice_fillup_page = $payment_page = $allotement_page = $choice_preview_page = false;
                     $payment_done =  $upgrade_done = $admitted = $accept_allotement = $upgrade_payment_done = $reject =  $schedule_choice_fillup = $schedule_admission = $student_auto_reject = false;
 
-                    $checkChoice = $student->is_lock_manual;
+                    // $checkChoice = $student->is_lock_manual;
                     $checkChoiceAuto = $student->is_lock_auto;
                     $checkPayment = $student->is_payment;
                     $checkallotement = $student->is_alloted;
@@ -320,21 +320,21 @@ class AuthController extends Controller
                     // ->first();
                     // $check_photo_sign = $photosign ? true : false;
 
-                    if ($check_choice_status && ($checkChoice == 0) &&  ($checkChoiceAuto == 0)) {
-                        $choice_fillup_page = true;
-                    }
+                    // if ($check_choice_status && ($checkChoice == 0) &&  ($checkChoiceAuto == 0)) {
+                    //     $choice_fillup_page = true;
+                    // }
 
-                    if ((($checkChoice == 1) ||  ($checkChoiceAuto == 1)) && ($checkallotement == 0)) { //&& ($checkallotement == 0)
-                        $choice_preview_page = true;
-                    }
+                    // if ((($checkChoice == 1) ||  ($checkChoiceAuto == 1)) && ($checkallotement == 0)) { //&& ($checkallotement == 0)
+                    //     $choice_preview_page = true;
+                    // }
 
-                    if ((($checkChoice == 1) || ($checkChoiceAuto == 1)) && ($checkPayment == 0)) {
-                        $payment_page = true;
-                    }
+                    // if ((($checkChoice == 1) || ($checkChoiceAuto == 1)) && ($checkPayment == 0)) {
+                    //     $payment_page = true;
+                    // }
 
-                    if ((($checkChoice == 1) || ($checkChoiceAuto == 1))) {
-                        $allotement_page = true;
-                    }
+                    // if ((($checkChoice == 1) || ($checkChoiceAuto == 1))) {
+                    //     $allotement_page = true;
+                    // }
 
                     // if ((($checkChoice == 1) || ($checkChoiceAuto == 1)) && ($checkallotement == 1)) {
                     //     $allotement_page = true;

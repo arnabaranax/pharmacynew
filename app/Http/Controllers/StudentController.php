@@ -56,10 +56,10 @@ class StudentController extends Controller
                     'dob' => ['required'],
                     'email' => ['required'],
                     'gender' => ['required'],
-                    'address' => ['required'],
-                    'ps' => ['required'],
-                    'po' => ['required'],
-                    'pin' => ['required'],
+                    'address' => ['nullable'],
+                    'ps' => ['nullable'],
+                    'po' => ['nullable'],
+                    'pin' => ['nullable'],
                     'is_married' => ['nullable'],
                     'is_kanyashree' => ['nullable'],
                     'is_pwd' => ['nullable'],
@@ -247,11 +247,11 @@ class StudentController extends Controller
     public function downloadReceipt($from_num)
     {
         try {
-            $registerstudent = DB::table('final_pharmacy_register_student')
+            $registerstudent = DB::table('pharmacy_register_student_final')
                 ->where(['s_appl_form_num' => $from_num])
                 ->leftJoin('institute_master', 'i_code', '=', 's_inst_code')
                 ->select(
-                    'final_pharmacy_register_student.*',
+                    'pharmacy_register_student_final.*',
                     'institute_master.i_id',
                     'institute_master.i_name',
                     'institute_master.i_code',

@@ -15,7 +15,7 @@ class Institute extends Model
 
     public function enrollments()
     {
-        return $this->hasMany(final_pharmacy_register_student::class, 's_inst_code', 'i_code');
+        return $this->hasMany(pharmacy_register_student_final::class, 's_inst_code', 'i_code');
     }
 
     public function selfs()

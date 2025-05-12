@@ -448,7 +448,7 @@ if (!function_exists('resizeImage')) {
 if (!function_exists('getOverallStatus')) {
     function getOverallStatus($stud_id)
     {
-        $student =   DB::table('final_pharmacy_register_student as rs')
+        $student =   DB::table('pharmacy_register_student_final as rs')
             ->where('rs.s_id', $stud_id)->first();
 
         $allotment    =    DB::table('pharmacy_choice_student')
@@ -460,58 +460,58 @@ if (!function_exists('getOverallStatus')) {
 
         $status = "DATA_NOT_AVAILABLE";
 
-        if ($is_allot) {
-            if (($student->is_lock_manual == 1)
-                && ($student->is_alloted == 1)
-                && ($student->is_allotment_accept == 0)
-                && ($student->is_upgrade == 0)
-                && ($student->s_admited_status == 0)
-            ) {
-                $status = "SEAT_ALLOTED";
-            } else if (($student->is_lock_manual == 1)
-                && ($student->is_alloted == 1)
-                && ($student->is_allotment_accept == 1)
-                && ($student->s_admited_status == 0)
-            ) {
-                $status = "ALLOTMENT_ACCEPTED";
-            } else if (($student->is_lock_manual == 1)
-                && ($student->is_alloted == 1)
-                && ($student->is_allotment_accept == 0)
-                && ($student->is_upgrade_payment == 0)
-                && ($student->s_admited_status == 0)
-            ) {
-                $status = "UPGRADATION_PAYMENT_PENDING";
-            } else if (($student->is_lock_manual == 1) && ($student->is_alloted == 1) && ($student->is_allotment_accept == 0) && ($student->is_upgrade == 1) && ($student->is_upgrade_payment == 1) && ($student->s_admited_status == 0)) {
-                $status = "ALLOTMENT_UPGRADED";
-            } else if ($student->s_admited_status == 1 && $student->is_registration_payment != 1) {
-                $status = "ADMITTED BUT REGISTRATION FEES NOT PAID";
-            } else if ($student->s_admited_status == 1 && $student->is_registration_payment == 1) {
-                $status = "REGISTRATION FEES PAID";
-            } else {
-                $status = "DATA_NOT_AVAILABLE";
-            }
-        } else {
-            if (($student->is_lock_manual == 1)
-                && ($student->is_payment == 1)
-                && ($student->is_alloted == 0)
-            ) {
-                $status = "SEAT_NOT_ALLOTED";
-            } else if (($student->is_lock_manual == 1)
-                && ($student->is_payment == 1)
-            ) {
-                $status = "COUNSELLING_FEES_PAID";
-            } else if (($student->is_lock_manual == 1)
-                && ($student->is_payment == 0)
-            ) {
-                $status = "CHOICE_MANUAL_LOCK";
-            } else if (($student->s_home_district != NULL)
-                && ($student->is_lock_manual == 0)
-            ) {
-                $status = "PROFILE_UPDATED";
-            } else {
-                $status = "DATA_NOT_AVAILABLE";
-            }
-        }
+        // if ($is_allot) {
+        //     if (($student->is_lock_manual == 1)
+        //         && ($student->is_alloted == 1)
+        //         && ($student->is_allotment_accept == 0)
+        //         && ($student->is_upgrade == 0)
+        //         && ($student->s_admited_status == 0)
+        //     ) {
+        //         $status = "SEAT_ALLOTED";
+        //     } else if (($student->is_lock_manual == 1)
+        //         && ($student->is_alloted == 1)
+        //         && ($student->is_allotment_accept == 1)
+        //         && ($student->s_admited_status == 0)
+        //     ) {
+        //         $status = "ALLOTMENT_ACCEPTED";
+        //     } else if (($student->is_lock_manual == 1)
+        //         && ($student->is_alloted == 1)
+        //         && ($student->is_allotment_accept == 0)
+        //         && ($student->is_upgrade_payment == 0)
+        //         && ($student->s_admited_status == 0)
+        //     ) {
+        //         $status = "UPGRADATION_PAYMENT_PENDING";
+        //     } else if (($student->is_lock_manual == 1) && ($student->is_alloted == 1) && ($student->is_allotment_accept == 0) && ($student->is_upgrade == 1) && ($student->is_upgrade_payment == 1) && ($student->s_admited_status == 0)) {
+        //         $status = "ALLOTMENT_UPGRADED";
+        //     } else if ($student->s_admited_status == 1 && $student->is_registration_payment != 1) {
+        //         $status = "ADMITTED BUT REGISTRATION FEES NOT PAID";
+        //     } else if ($student->s_admited_status == 1 && $student->is_registration_payment == 1) {
+        //         $status = "REGISTRATION FEES PAID";
+        //     } else {
+        //         $status = "DATA_NOT_AVAILABLE";
+        //     }
+        // } else {
+        //     if (($student->is_lock_manual == 1)
+        //         && ($student->is_payment == 1)
+        //         && ($student->is_alloted == 0)
+        //     ) {
+        //         $status = "SEAT_NOT_ALLOTED";
+        //     } else if (($student->is_lock_manual == 1)
+        //         && ($student->is_payment == 1)
+        //     ) {
+        //         $status = "COUNSELLING_FEES_PAID";
+        //     } else if (($student->is_lock_manual == 1)
+        //         && ($student->is_payment == 0)
+        //     ) {
+        //         $status = "CHOICE_MANUAL_LOCK";
+        //     } else if (($student->s_home_district != NULL)
+        //         && ($student->is_lock_manual == 0)
+        //     ) {
+        //         $status = "PROFILE_UPDATED";
+        //     } else {
+        //         $status = "DATA_NOT_AVAILABLE";
+        //     }
+        // }
 
         return $status;
     }
