@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/authenticate', [AuthController::class, 'authenticate']);
 Route::post('/validate-security-code', [AuthController::class, 'validateSecurityCode']);
+Route::get('/check-status/{from_num}', [StudentController::class, 'checkRedirect']);
 Route::prefix('student')->group(function () {
     Route::post('/student-info-update', [StudentController::class, 'studentInfoUpdate']);
     Route::get('/download-receipt/{from_num}', [StudentController::class, 'downloadReceipt']);

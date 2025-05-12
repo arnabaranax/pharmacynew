@@ -282,4 +282,132 @@ class StudentController extends Controller
             ], 400);
         }
     }
+    public function checkRedirect($from_num)
+    {
+        $newuser = Registerstudent::where('s_appl_form_num', $from_num)->first();
+        // dd($newuser);
+
+        if ($newuser) {
+            $profile_updated = $choice_fillup_page = $payment_page = $allotement_page = $choice_preview_page
+                = $payment_done =  $upgrade_done = $admitted = $accept_allotement = $upgrade_payment_done = $reject =  $schedule_choice_fillup = $schedule_admission = $student_auto_reject = false;
+
+            $checkChoice = $newuser->is_lock_manual;
+            $checkChoiceAuto = $newuser->is_lock_auto;
+            $checkPayment = $newuser->is_payment;
+            $checkallotement = $newuser->is_alloted;
+            $profile_updated = (bool)$newuser->is_profile_updated;
+            $checkUpgrade = $newuser->is_upgrade;
+            $checkUpgradePayment = $newuser->is_upgrade_payment;
+            $checkAdmitted = $newuser->s_admited_status;
+            $checkAllotementAccept = $newuser->is_allotment_accept;
+            $checkStatusReject = $newuser->s_admited_status;
+            $student_reject_remarks = $newuser->s_remarks;
+
+            $check_choice_fillup = config_schedule('CHOICE_FILLUP');
+            $check_choice_status = $check_choice_fillup['status'];
+
+            $check_accept = config_schedule('ACCEPT');
+            $check_accept_status = $check_accept['status'];
+
+            $check_upgrade = config_schedule('UPGRADE');
+            $check_upgrade_status = $check_upgrade['status'];
+
+            $check_admission = config_schedule('ADMISSION');
+            $check_admission_status = $check_admission['status'];
+
+            $checkStudentAutoRejectRound = $newuser->s_auto_reject;
+
+            $got_first_choice = StudentChoice::where([
+                'ch_stu_id' => $newuser->s_id,
+                'ch_inst_code' => $newuser->s_inst_code,
+                'ch_pref_no' => 1,
+            ])->first();
+            // $photosign= PharmacyPhotoSign::where([
+            // 'student_aadhar_no'=>$newuser->s_aadhar_original])
+            // ->first();
+            // $check_photo_sign = $photosign ? true : false;
+
+            if ($check_choice_status && (($checkChoice == 0) &&  ($checkChoiceAuto == 0))) {
+                $choice_fillup_page = true;
+            }
+
+            if ((($checkChoice == 1) ||  ($checkChoiceAuto == 1)) && ($checkallotement == 0)) { //&& ($checkallotement == 0)
+                $choice_preview_page = true;
+            }
+
+            if ((($checkChoice == 1) || ($checkChoiceAuto == 1)) && ($checkPayment == 0)) {
+                $payment_page = true;
+            }
+
+            if ($checkPayment == 1) {
+                $payment_done = true;
+            }
+
+            if ((($checkChoice == 1) || ($checkChoiceAuto == 1))) {
+                $allotement_page = true;
+            }
+
+            // if ((($checkChoice == 1) || ($checkChoiceAuto == 1)) && ($checkallotement == 1)) {
+            //     $allotement_page = true;
+            // }
+
+            if ($checkUpgrade == 1) {
+                $upgrade_done = true;
+            }
+            if ($checkUpgradePayment == 1) {
+                $upgrade_payment_done = true;
+            }
+            if ($checkAdmitted == 1) {
+                $admitted = true;
+            }
+            if ($checkAllotementAccept == 1) {
+                $accept_allotement = true;
+            }
+            if ($checkStatusReject == 2) {
+                $reject = true;
+            }
+            if ($check_choice_status == true) {
+                $schedule_choice_fillup = true;
+            }
+            if ($check_admission_status == true) {
+                $schedule_admission = true;
+            }
+            if ($checkStudentAutoRejectRound == 1) {
+                $student_auto_reject = true;
+            }
+
+            $redirect = [
+                'profile_update' => $profile_updated,
+                'choice_fillup_page'   => $choice_fillup_page,
+                'payment_page'   => $payment_page,
+                'choice_preview_page'   => $choice_preview_page,
+                'payment_done' => $payment_done,
+                'allotement_page'   => $allotement_page,
+                'upgrade_done' => $upgrade_done,
+                'upgrade_payment_done' => $upgrade_payment_done,
+                'student_admitted' => $admitted,
+                'student_allotment_accepted' => $accept_allotement,
+                'allotment_accepted' => $accept_allotement,
+                'student_reject_status' => $reject,
+                'student_reject_remarks' => $student_reject_remarks,
+                'schedule_choice_fillup' => $schedule_choice_fillup,
+                'schedule_acceptance' => $check_accept_status,
+                'schedule_upgradation' => $check_upgrade_status,
+                'schedule_admission' => $schedule_admission,
+                'student_auto_reject' => $student_auto_reject,
+                'can_upgrade' => $newuser->is_alloted == 1 && is_null($got_first_choice) ? true : false,
+                'upgrade_enabled' => env('UPGRADE_ENABLED'),
+                'registration_fees_paid' => (bool)$newuser->is_registration_payment,
+                'is_spot_payment' => (bool)$newuser->is_spot_payment,
+                'overall_status' => getOverallStatus($newuser->s_id),
+                // 'check_photo_sign' => $check_photo_sign
+            ];
+
+            return response()->json([
+                'error'     =>  false,
+                'message'   =>  'Data found',
+                'redirect' => $redirect
+            ]);
+        }
+    }
 }
