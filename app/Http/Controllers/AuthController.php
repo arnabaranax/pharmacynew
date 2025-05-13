@@ -193,7 +193,7 @@ class AuthController extends Controller
 
                     $token = md5($now . rand(10000000, 99999999));
                     $expiry = date("Y-m-d H:i:s", strtotime('+4 hours', strtotime($now)));
-
+                    // dd($expiry);
                     Token::updateOrCreate([
                         't_user_id' => $student->s_id,
                     ], [

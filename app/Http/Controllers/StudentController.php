@@ -260,15 +260,15 @@ class StudentController extends Controller
                 )
                 ->first();
             // dd($registerstudent);
-            $payment = PaymentTransaction::where('pmnt_stud_id', $registerstudent->s_id)
-                ->where('pmnt_pay_type', 'APPLICATION')
-                ->where('trans_status', 'SUCCESS')
-                ->first();
+            // $payment = PaymentTransaction::where('pmnt_stud_id', $registerstudent->s_id)
+            //     ->where('pmnt_pay_type', 'APPLICATION')
+            //     ->where('trans_status', 'SUCCESS')
+            //     ->first();
             // dd($payment);
 
             $pdf = PDF::loadView('exports.applicationform', [
                 'registerstudent' => $registerstudent,
-                'payment' => $payment,
+                // 'payment' => $payment,
             ]);
 
             return $pdf->setPaper('a4', 'portrait')
@@ -410,4 +410,62 @@ class StudentController extends Controller
             ]);
         }
     }
+
+
+    public function studentdetails($from_num)
+    {
+        $student = Registerstudent::where('s_appl_form_num', $from_num)->first();
+
+        if (!$student) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Student not found',
+            ], 404);
+        }
+
+        $studentData = [
+            's_id' => $student->s_id,
+            's_uuid'=>$student->s_uuid,
+            's_appl_form_num' => $student->s_appl_form_num,
+            // 's_appl_sess_year' => $student->s_appl_sess_year,
+            // 's_appl_reg_no' => $student->s_appl_reg_no,
+            // 's_appl_reg_year' => $student->s_appl_reg_year,
+            's_first_name' => $student->s_first_name,
+            's_middle_name' => $student->s_middle_name,
+            's_last_name' => $student->s_last_name,
+            's_full_name' => $student->s_candidate_name,
+            'father_name' => $student->s_father_name,
+            'mother_name' => $student->s_mother_name,
+            's_dob' => $student->s_dob,
+            's_aadhar_no'=>$student->s_aadhar_original,
+            's_phone'=>$student->s_phone,
+            's_email' => $student->s_email,
+            's_gender'=>$student->s_gender,
+            's_religion'=>$student->s_religion,
+            's_caste' => $student->s_caste,
+            'address' => $student->address,
+            's_tfw' => $student->s_tfw,
+            's_pwd' => $student->s_pwd,
+            's_llq' => $student->s_llq,
+            's_exsm' => $student->s_exsm,
+            'ps' => $student->ps,
+            'po' => $student->po,
+            'pin' => $student->pin,
+            'institute_code' => $student->s_inst_code,
+            's_alloted_category' => $student->s_alloted_category,
+            's_photo' => $student->s_photo ? URL::to("storage/{$student->s_photo}") : '',
+            's_sign'  => $student->s_sign ? URL::to("storage/{$student->s_sign}") : '',
+            'is_married' => (bool)$student->is_married,
+            'is_kanyashree' => (bool)$student->is_kanyashree,
+            'role_id' => 2,
+            'is_registration_payment'=>(bool)$student->is_registration_payment,
+        ];
+
+        return response()->json([
+            'error' => false,
+            'message' => 'Data found',
+            'redirect' => $studentData,
+        ]);
+    }
+
 }

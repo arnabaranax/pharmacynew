@@ -211,12 +211,6 @@
                         <td>Inst. Name:</td>
                         <td>{{ isset($registerstudent->i_name) ? $registerstudent->i_name : 'N/A' }}</td>
                     </tr>
-                    @if($payment)
-                    <tr>
-                        <td>Paid Amount:</td>
-                        <td>{{ isset($payment->trans_amount) ? "Rs. {$payment->trans_amount}/-" : 'N/A' }} ({{ $payment->pmnt_pay_type }})</td>
-                    </tr>
-                    @endif
                    
                 </tbody>
             </table>

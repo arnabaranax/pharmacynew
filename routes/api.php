@@ -25,5 +25,6 @@ Route::get('/check-status/{user_id}', [StudentController::class, 'checkRedirect'
 Route::prefix('student')->group(function () {
     Route::post('/student-info-update', [StudentController::class, 'studentInfoUpdate']);
     Route::get('/download-receipt/{from_num}', [StudentController::class, 'downloadReceipt']);
+    Route::get('/student-details/{from_num}', [StudentController::class, 'studentdetails']);
 });
 
